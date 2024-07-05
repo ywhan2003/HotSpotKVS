@@ -7,6 +7,8 @@
 #include <string>
 
 class KeyValueStore {
+using KVPair = std::pair<std::string, std::string>;
+
 public:
     KeyValueStore(size_t cache_size);
     void put(const std::string& key, const std::string& value);
@@ -15,10 +17,10 @@ public:
 private:
     void update_cache(const std::string& key, const std::string& value);
 
-    size_t cache_size;
-    std::unordered_map<std::string, std::string> store;
-    std::list<std::pair<std::string, std::string>> cache_list;
-    std::unordered_map<std::string, std::list<std::pair<std::string, std::string>>::iterator> cache;
+    size_t cache_size_;
+    std::unordered_map<std::string, std::string> store_;
+    std::list<KVPair> cache_list_;
+    std::unordered_map<std::string, std::list<KVPair>::iterator> cache_; // 某个键在链表中的位置
 };
 
 #endif // KEY_VALUE_STORE_H
