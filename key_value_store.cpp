@@ -15,6 +15,14 @@ void KeyValueStore::put(const std::string& key, const std::string& value) {
  * @brief 返回指定键对应的值
 */
 auto KeyValueStore::read(const std::string& key) -> std::string {
+    auto hot_cache_iter = hot_cache_.find(key);
+    if (hot_cache_iter != hot_cache_.end()) {
+        record_access(key);
+        // 使用LRU策略将被访问到的键放到链表头
+        hot_list_.splice(hot_list_.begin(), hot_list_, hot_cache_iter->second);
+        return hot_cache_iter->second->second;
+    }
+
     auto cold_cache_iter = cold_cache_.find(key);
     if (cold_cache_iter != cold_cache_.end()) {
         record_access(key);
@@ -24,14 +32,6 @@ auto KeyValueStore::read(const std::string& key) -> std::string {
             move_to_hot(key, cold_cache_iter->second->second);
         }
         return cold_cache_iter->second->second;
-    }
-    
-    auto hot_cache_iter = hot_cache_.find(key);
-    if (hot_cache_iter != hot_cache_.end()) {
-        record_access(key);
-        // 使用LRU策略将被访问到的键放到链表头
-        hot_list_.splice(hot_list_.begin(), hot_list_, hot_cache_iter->second);
-        return hot_cache_iter->second->second;
     }
     
     auto store_iter = store_.find(key);

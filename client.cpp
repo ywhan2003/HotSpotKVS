@@ -13,7 +13,7 @@ int main() {
         double hotspot_ratio = X / 100.0;
         size_t hotspot_keys = total_keys * hotspot_ratio;
 
-        KeyValueStore kv_store(1000, 50000);
+        KeyValueStore kv_store(50000, 1000000);
         ClientSimulator client(kv_store, 8, 16, hotspot_ratio, total_keys, hotspot_keys);
         results.push_back(client.run(300));
     }
