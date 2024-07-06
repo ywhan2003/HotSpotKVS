@@ -12,7 +12,7 @@ public:
     auto read(const std::string& key) -> std::string;
 
 private:
-    auto hash_function(const std::string& key) -> int;
+    auto hash_function(const std::string& key) -> int { return hasher_(key); };
 
     std::vector<RingHeader *> table_; // 管理每一个环的哈希表
     int table_size_; // 哈希表的大小

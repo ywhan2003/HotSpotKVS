@@ -16,31 +16,26 @@ RingManager::RingManager(int k) : k_(k), table_size_(1) {
 }
 
 void RingManager::put(const std::string& key, const std::string& value) {
-    int index = hash_function(key);
-    int tag = index & (~mask_);
-    RingItem item(tag, key, value);
-    std::cout << index << std::endl;
+    int hash_value = hash_function(key);
+    int index = hash_value & mask_;
+    int tag = hash_value & (~mask_);
+    auto *item = new RingItem(tag, key, value); // 这里一定要用指针，否则该函数结束时内存会被释放
     if (table_[index] == nullptr) {
-        std::cout << "here" << std::endl;
         table_[index] = new RingHeader();
-        table_[index]->set_header_address(&item);
+        table_[index]->set_header_address(item);
         table_[index]->increase_total_counter(1);
         return;
     }
-    table_[index]->put(item);
+    table_[index]->put(*item);
 }
 
 auto RingManager::read(const std::string& key) -> std::string {
-    int index = hash_function(key);
+    int hash_value = hash_function(key);
+    int index = hash_value & mask_;
     RingHeader *header = table_[index];
 
-    int tag = index & (~mask_);
+    int tag = hash_value & (~mask_);
     RingItem item(tag, key);
 
     return header == nullptr ? "" : header->read(item);
-}
-
-auto RingManager::hash_function(const std::string& key) -> int {
-    size_t hash_value = hasher_(key);
-    return (hash_value & 0x3);
 }

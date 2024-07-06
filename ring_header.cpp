@@ -68,13 +68,11 @@ auto RingHeader::end(const RingItem& item, const RingItem& reached_item, bool *f
     const RingItem& next_item = *(reached_item.get_next_address());
     const RingItem& next_next_item = *(next_item.get_next_address());
 
-    // 在最小项前面
+    // 在最小项前面或最大项后面
     bool case1 = next_item < reached_item && next_item < next_next_item && item < next_item;
-    // 在最大项前面
-    bool case2 = next_item > reached_item && next_item > next_next_item && item > next_item;
     // 在两者之间
-    bool case3 = next_item < item && item < reached_item;
-    bool case4 = next_item > item && item > reached_item;
+    bool case2 = next_item < item && item < reached_item;
+    bool case3 = next_item > item && item > reached_item;
 
-    return case1 || case2 || case3 || case4;
+    return case1 || case2 || case3;
 }

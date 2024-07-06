@@ -6,13 +6,16 @@
 class RingItem {
 public:
     RingItem(int tag, const std::string& key)  
-        : tag_(tag), key_(key), value_(""), metadata_(""), rehash_(0), occupied_(0), counter_(1), next_address_(this) {}
+        : tag_(tag), key_(key), value_(""), metadata_(""), 
+            rehash_(0), occupied_(0), counter_(1), next_address_(this) {}
 
     RingItem(int tag, const std::string& key, const std::string& value) 
-        : tag_(tag), key_(key), value_(value), metadata_(""), rehash_(0), occupied_(0), counter_(1), next_address_(this) {}
+        : tag_(tag), key_(key), value_(value), metadata_(""), 
+            rehash_(0), occupied_(0), counter_(1), next_address_(this) {}
 
     RingItem(const std::string& metadata, int tag, const std::string& key, const std::string& value)
-        : metadata_(metadata), tag_(tag), key_(key), value_(value), rehash_(0), occupied_(0), counter_(1), next_address_(this) {}
+        : metadata_(metadata), tag_(tag), key_(key), value_(value), 
+            rehash_(0), occupied_(0), counter_(1), next_address_(this) {}
 
     auto get_metadata() const -> std::string { return metadata_; }
     void set_metadata(std::string& metadata) { metadata_ = metadata; }
@@ -38,16 +41,16 @@ public:
     auto get_value() const -> std::string { return value_; }
     void set_value(const std::string& value) { value_ = value; }
 
-    bool operator<(const RingItem& ring) const {
-        return this->tag_ == ring.get_tag() ? this->key_ < ring.get_key() : this->tag_ < ring.get_tag();
+    bool operator<(const RingItem& item) const {
+        return this->tag_ == item.get_tag() ? this->key_ < item.get_key() : this->tag_ < item.get_tag();
     }
 
-    bool operator>(const RingItem& ring) const {
-        return this->tag_ == ring.get_tag() ? this->key_ > ring.get_key() : this->tag_ > ring.get_tag();
+    bool operator>(const RingItem& item) const {
+        return this->tag_ == item.get_tag() ? this->key_ > item.get_key() : this->tag_ > item.get_tag();
     }
 
-    bool operator==(const RingItem& ring) const {
-        return this->tag_ == ring.get_tag() ? this->key_ == ring.get_key() : false;
+    bool operator==(const RingItem& item) const {
+        return this->tag_ == item.get_tag() ? this->key_ == item.get_key() : false;
     }
 
 private:
