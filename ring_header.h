@@ -23,6 +23,8 @@ private:
     auto traverse(const RingItem& item, bool *found) const -> RingItem *;
     auto end(const RingItem& item, const RingItem& reached_item, bool *found) const -> bool;
 
+    const unsigned int R = 5; // 再经历5次搜索后进行热点转移
+    unsigned int current = 0; // 目前已经搜索的次数
     char active_; // 控制统计采样
     unsigned int total_counter_; // 该环被访问的次数
     RingItem *header_address_; // 指向的第一个item

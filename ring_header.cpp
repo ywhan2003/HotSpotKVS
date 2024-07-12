@@ -24,6 +24,12 @@ auto RingHeader::read(RingItem& item) -> std::string {
     if (found) {
         location->increase_counter(1);
         increase_total_counter(1);
+        current++;
+
+        if (current == R) {
+            set_header_address(location);
+            current = 0;
+        }
         return location->get_value();
     }
 
